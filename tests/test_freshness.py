@@ -215,3 +215,26 @@ def test_manual_documents_get_a_monthly_reminder_only(tmp_path):
     mid = run_check(reg, state, fake(page), today=date(2026, 11, 16), delay=0)
     assert issue_for(early)[0].startswith("Monthly reminder")
     assert issue_for(mid) is None
+
+
+# ---------- banks that block GitHub's computers ----------
+
+def test_ci_skips_local_only_documents_without_downloading(tmp_path):
+    reg, state = registry(tmp_path, remote_check=False), {}
+
+    def must_not_fetch(url):
+        raise AssertionError("should not download in CI")
+
+    results = run_check(reg, state, must_not_fetch, today=TODAY, delay=0, ci=True)
+    assert flags(results) == ["local_only"]
+    assert "last_confirmed" not in state["documents"]["test_bank_cards"]
+    assert issue_for(results) is None  # 28 Oct: not the first week, so no reminder
+    early = run_check(reg, state, must_not_fetch, today=date(2026, 11, 2), delay=0, ci=True)
+    assert issue_for(early)[0].startswith("Monthly reminder")
+    assert "Check from your laptop" in render_report(early)
+
+
+def test_laptop_run_checks_local_only_documents(tmp_path):
+    reg, state = registry(tmp_path, remote_check=False), {}
+    run(reg, state, {PDS_URL: make_pdf("Version A")})  # ci=False, like a laptop
+    assert state["documents"]["test_bank_cards"]["last_confirmed"] == "2026-10-28"

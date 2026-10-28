@@ -43,6 +43,9 @@ class Document(BaseModel):
     expected_version: Optional[str] = None
     last_checked: Optional[date] = None
     notes: Optional[str] = None
+    # False when the bank's site blocks GitHub's computers: the weekly run then skips it
+    # and a monthly reminder asks for a check from a laptop in Malaysia instead.
+    remote_check: bool = True
 
     @field_validator("doc_id")
     @classmethod

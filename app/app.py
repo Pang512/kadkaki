@@ -9,6 +9,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from agent import Agent  # noqa: E402
+from freshness_info import checked_caption, load_bank_docs, load_last_checked  # noqa: E402
 from fetch_data import ensure_data  # noqa: E402
 
 st.set_page_config(page_title="KadKaki", page_icon="💳", layout="wide")
@@ -63,14 +64,24 @@ def source_line(n, s):
     return f"[{n}] {s['bank']} | {s['title']} | page {pages} | valid as at {s.get('valid_as_at') or 'unknown'}"
 
 
+@st.cache_data(ttl=6 * 60 * 60, show_spinner=False)
+def freshness_dates():
+    """Last-checked dates from the weekly freshness check; refreshed every 6 hours."""
+    return load_last_checked(), load_bank_docs()
+
+
 def show_sources(result, agent):
     cited = result["cited"]
     if not cited:
         return
+    dates, bank_docs = freshness_dates()
     with st.expander(f"Sources ({len(cited)} cited)"):
         for n in cited:
             s = result["sources"][n - 1]
             st.markdown(f"**{source_line(n, s)}**")
+            checked = checked_caption(s, agent.retriever.chunks, dates, bank_docs)
+            if checked:
+                st.caption(checked)
             if s["kind"] == "document":
                 text = next(c["text"] for c in agent.retriever.chunks if c["chunk_id"] == s["chunk_id"])
                 st.caption(text[:600] + ("..." if len(text) > 600 else ""))

@@ -48,12 +48,12 @@ MONTHS = (r"JAN(?:UARY)?|FEB(?:RUARY)?|MAR(?:CH)?|APR(?:IL)?|MAY|JUNE?|JULY?|AUG
 # A line is a candidate version label if it mentions a month and a year, or a numeric date
 DATE_LIKE = re.compile(rf"\b(?:{MONTHS})\b[\s,.-]*\d{{4}}\b|\b\d{{1,2}}[/.-]\d{{1,2}}[/.-]\d{{4}}\b", re.I)
 
-ATTENTION = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual",
+ATTENTION = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual", "local_only",
              "new_links", "missing_links", "not_linked", "page_unreachable"}
 # Problems that need a person this week. "manual" is a standing reminder instead (monthly issue).
-REVIEW = ATTENTION - {"manual"}
+REVIEW = ATTENTION - {"manual", "local_only"}
 # A document is "confirmed" on a date when its live file was fetched and matched the accepted version.
-NOT_CONFIRMED = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual"}
+NOT_CONFIRMED = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual", "local_only"}
 
 NEXT_STEP = {
     "changed": "The file is different from the accepted version. Open it, check what changed, then accept it.",
@@ -62,6 +62,7 @@ NEXT_STEP = {
     "unreachable": "Open the link in a browser. If it works there, the site may block scripts: download it by hand.",
     "not_pdf": "The link returned a web page instead of a PDF. The file may have moved: find it on the bank's site.",
     "manual": "No direct link. Download it from the bank page and compare with your copy in data/raw.",
+    "local_only": "This bank blocks GitHub's computers. Run the check from your laptop (see the data repo README).",
     "new_links": "New PDF links appeared on the page. Check for a new PDS or a new card.",
     "missing_links": "PDF links disappeared from the page. A document may have moved or been withdrawn.",
     "not_linked": "This document's link is no longer on its bank page. It may have been replaced.",
@@ -202,8 +203,11 @@ def check_page(url, doc_urls, entry, fetcher):
     return result
 
 
-def run_check(registry, state, fetcher=fetch, today=None, delay=1.0):
-    """Check every document and bank page. Updates `state` in place and returns the results."""
+def run_check(registry, state, fetcher=fetch, today=None, delay=1.0, ci=False):
+    """Check every document and bank page. Updates `state` in place and returns the results.
+
+    ci=True (on GitHub) skips documents marked remote_check: false, whose sites block GitHub.
+    """
     today = (today or date.today()).isoformat()
     docs_state = state.setdefault("documents", {})
     pages_state = state.setdefault("pages", {})
@@ -211,6 +215,10 @@ def run_check(registry, state, fetcher=fetch, today=None, delay=1.0):
 
     for doc in registry.documents:
         entry = docs_state.setdefault(doc.doc_id, {})
+        if ci and not doc.remote_check:
+            doc_results.append({"doc_id": doc.doc_id, "bank": doc.bank, "flags": ["local_only"],
+                                "candidates": [], "detail": ""})
+            continue
         result = check_document(doc, entry, fetcher)
         doc_results.append(result)
         if doc.url:
@@ -269,7 +277,7 @@ def issue_for(results, today=None):
     """
     day = (today or date.fromisoformat(results["date"])).day
     review = [r for r in results["documents"] + results["pages"] if REVIEW & set(r["flags"])]
-    manual = [r for r in results["documents"] if "manual" in r["flags"]]
+    manual = [r for r in results["documents"] if {"manual", "local_only"} & set(r["flags"])]
     if review:
         title = f"Freshness check {results['date']}: {len(review)} item(s) to review"
     elif manual and day <= 7:
@@ -311,6 +319,12 @@ def render_report(results):
             for label, urls in (("New", p["new"]), ("Missing", p["missing"]), ("Not linked", p["not_linked"])):
                 lines += [f"  - {label}: {u}" for u in urls]
             lines.append("")
+
+    local = [r for r in results["documents"] if "local_only" in r["flags"]]
+    if local:
+        lines += ["## Check from your laptop", "", NEXT_STEP["local_only"], ""]
+        lines += [f"- `{r['doc_id']}` ({r['bank']})" for r in local]
+        lines.append("")
 
     manual = [r for r in results["documents"] if "manual" in r["flags"]]
     if manual:
@@ -359,6 +373,7 @@ def main(argv=None):
     parser.add_argument("--accept-all", action="store_true", help="accept everything currently seen")
     parser.add_argument("--state", default=STATE, help="state file (default: data/freshness_state.json)")
     parser.add_argument("--report", default=REPORT, help="report file (default: reports/freshness_latest.md)")
+    parser.add_argument("--ci", action="store_true", help="running on GitHub: skip sources marked remote_check: false")
     parser.add_argument("--issue", help="if someone needs to act, write an issue (title on line 1) to this file")
     args = parser.parse_args(argv)
 
@@ -372,7 +387,7 @@ def main(argv=None):
         return 0
 
     print(f"Checking {len(registry.documents)} documents...")
-    results = run_check(registry, state)
+    results = run_check(registry, state, ci=args.ci)
     save_state(state, args.state)
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)

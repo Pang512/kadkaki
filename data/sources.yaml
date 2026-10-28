@@ -32,6 +32,7 @@ documents:
     language: en
     valid_as_at: "unknown"
     url: https://www.maybank2u.com.my/iwov-resources/pdf/personal/cards/credit_cards/cashback-mcard-platinum-pds.pdf
+    remote_check: false
     tier: 1
     doc_type: pds
     expected_version: null
@@ -100,6 +101,7 @@ documents:
     language: en
     valid_as_at: "unknown"
     url: https://www.maybank2u.com.my/iwov-resources/pdf/personal/cards/credit_cards/nadi-mastercard-pds.pdf
+    remote_check: false
     tier: 1
     doc_type: pds
     expected_version: "15/10/2026"
@@ -114,6 +116,7 @@ documents:
     language: en
     valid_as_at: "2025-12-31"
     url: https://www.bankislam.com/wp-content/uploads/Credit-Card-i-Product-Disclosure-Sheet-effective-31-December-2025-2.pdf
+    remote_check: false
     tier: 1
     doc_type: pds
     expected_version: "31 DECEMBER 2025"
