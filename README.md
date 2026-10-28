@@ -4,6 +4,8 @@ A neutral, non-commercial assistant that helps young Malaysians choose and under
 credit cards, conventional and Islamic, using the banks' own official documents.
 Every fact is dated and linked, and KadKaki says "I don't know" instead of guessing.
 
+**Live app:** https://kadkaki.streamlit.app/
+
 > **Status: Phase 0.** Currently runs the same engine as v3.2 (8 banks).
 > Expanding to the whole Malaysian market.
 
