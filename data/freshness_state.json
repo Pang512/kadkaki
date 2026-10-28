@@ -1,0 +1,101 @@
+{
+  "documents": {
+    "bankislam_credit_card_i": {
+      "accepted_sha256": "ef523bdb28386491ea431219732acd0d2dec5cb3b1e1bcd360646f1ef15f1d6a",
+      "accepted_text_sha256": "29255ea0a5f8fb6ac6d469d0ddbc23283f648fed73cefd7361bcc48594783339",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "ef523bdb28386491ea431219732acd0d2dec5cb3b1e1bcd360646f1ef15f1d6a",
+      "latest_text_sha256": "29255ea0a5f8fb6ac6d469d0ddbc23283f648fed73cefd7361bcc48594783339",
+      "version_found": true
+    },
+    "bsn_al_aiman": {
+      "accepted_sha256": "91b2f114a69187b5c24bd65fd42d47022f1b266926217dc394bc943bd92c8afc",
+      "accepted_text_sha256": "42c7799a626d4a28b42c086ada3877ac34d7400856cb36b9cd922b3f5d5f9198",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "91b2f114a69187b5c24bd65fd42d47022f1b266926217dc394bc943bd92c8afc",
+      "latest_text_sha256": "42c7799a626d4a28b42c086ada3877ac34d7400856cb36b9cd922b3f5d5f9198"
+    },
+    "cimb_credit_cards": {
+      "accepted_sha256": "efdf60a4f8458003e8220243f167f2cb20eba236dd00de170a6cf68eeacbe4f3",
+      "accepted_text_sha256": "4a5d19fa9b34d66d321df155ee1616fa6e7161963a7d7e7ea1941cf6ff7eff83",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "efdf60a4f8458003e8220243f167f2cb20eba236dd00de170a6cf68eeacbe4f3",
+      "latest_text_sha256": "4a5d19fa9b34d66d321df155ee1616fa6e7161963a7d7e7ea1941cf6ff7eff83",
+      "version_found": true
+    },
+    "hlb_credit_cards_bm": {
+      "accepted_sha256": "8d666b3cdbeea9ecd2bca09c38e5bb25fb6c8d056b2972106046080eff90bc78",
+      "accepted_text_sha256": "c7cf82403e91e19db5c8493d4bc88be292b9a2554bdc558f405de345b5c223fd",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "8d666b3cdbeea9ecd2bca09c38e5bb25fb6c8d056b2972106046080eff90bc78",
+      "latest_text_sha256": "c7cf82403e91e19db5c8493d4bc88be292b9a2554bdc558f405de345b5c223fd"
+    },
+    "hlb_credit_cards_en": {
+      "accepted_sha256": "a24a00895faa3ecb8cfabe1cc90454009896c177465d68f7b7b3876689a3f0b7",
+      "accepted_text_sha256": "18d251b580809525695f363cb5f71f271a6bc3ffac5db0c22db801f7f10a9c7d",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "a24a00895faa3ecb8cfabe1cc90454009896c177465d68f7b7b3876689a3f0b7",
+      "latest_text_sha256": "18d251b580809525695f363cb5f71f271a6bc3ffac5db0c22db801f7f10a9c7d",
+      "version_found": true
+    },
+    "maybank_cashback_platinum": {
+      "accepted_sha256": "a89424a88fc4d6b10ffbc8e6e730af05ec6b37e7d1a7e3cccf422b8a5acc2bb0",
+      "accepted_text_sha256": "ee8a68439affb1707cf7a4873a2d16db0de832cb3c1fab14f790058580d833ce",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "a89424a88fc4d6b10ffbc8e6e730af05ec6b37e7d1a7e3cccf422b8a5acc2bb0",
+      "latest_text_sha256": "ee8a68439affb1707cf7a4873a2d16db0de832cb3c1fab14f790058580d833ce"
+    },
+    "maybank_islamic_nadi": {
+      "accepted_sha256": "0af8a93bad5a415692d4676f1650c3773033a094640eaf828a0732129d0d312e",
+      "accepted_text_sha256": "fc73261ba417cb3530fdfa5858a3ccc0716453007659c0d317706d982aaca193",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "0af8a93bad5a415692d4676f1650c3773033a094640eaf828a0732129d0d312e",
+      "latest_text_sha256": "fc73261ba417cb3530fdfa5858a3ccc0716453007659c0d317706d982aaca193",
+      "version_found": true
+    },
+    "muamalat_credit_card_i": {
+      "accepted_sha256": "a3ead316d355a92109fd01e6b42a16d56049e3c72d66eeee8fd9363efa7e0d43",
+      "accepted_text_sha256": "c1758c4ec8fdd9c7c601aeb338c1d5904a93cf0ad61cbb47ffdd97ae0c5229a2",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "a3ead316d355a92109fd01e6b42a16d56049e3c72d66eeee8fd9363efa7e0d43",
+      "latest_text_sha256": "c1758c4ec8fdd9c7c601aeb338c1d5904a93cf0ad61cbb47ffdd97ae0c5229a2"
+    },
+    "ocbc_credit_cards": {
+      "accepted_sha256": "7a8135baf6b0a149bd6f858c62b89ec3565618c33832d3982b718196278c196a",
+      "accepted_text_sha256": "f32888cacaae02cd0b6b98f419e11c315d9a489e52f81006091d596b5924dcef",
+      "last_fetched": "2026-10-28",
+      "latest_sha256": "7a8135baf6b0a149bd6f858c62b89ec3565618c33832d3982b718196278c196a",
+      "latest_text_sha256": "f32888cacaae02cd0b6b98f419e11c315d9a489e52f81006091d596b5924dcef"
+    },
+    "pbb_credit_cards": {}
+  },
+  "pages": {
+    "https://pbebank.com/en/cards/our-cards/pb-quantum-credit-cards-2/": {
+      "accepted_links": [
+        "https://pbebank.com/media/0iclwwdc/faq-contactless-credit.pdf",
+        "https://pbebank.com/media/4p2bnpyw/pds-credit-card-bm.pdf",
+        "https://pbebank.com/media/5bthu4ux/supplementary-cc-appform.pdf",
+        "https://pbebank.com/media/ctug2iga/wechat_pbb.pdf?nodeguid=2e33ae21-4636-474a-9afe-26120e9a3a8d&lang=en-US&ext=.pdf",
+        "https://pbebank.com/media/mvnlgiem/pbepbeng002.pdf",
+        "https://pbebank.com/media/qvthl2qt/pb-quantum-tnc.pdf",
+        "https://pbebank.com/media/rczb0ouh/pds-credit-card-en.pdf",
+        "https://pbebank.com/media/rdvptenz/exclusion-list-for-card-rewards.pdf",
+        "https://pbebank.com/media/sxchnwqn/faq-pb-lifestyle-debit-card-renewal-via-mypb-eng-to-bm.pdf",
+        "https://pbebank.com/media/vjjfoitb/dos-pbcc0125.pdf"
+      ],
+      "last_fetched": "2026-10-28",
+      "latest_links": [
+        "https://pbebank.com/media/0iclwwdc/faq-contactless-credit.pdf",
+        "https://pbebank.com/media/4p2bnpyw/pds-credit-card-bm.pdf",
+        "https://pbebank.com/media/5bthu4ux/supplementary-cc-appform.pdf",
+        "https://pbebank.com/media/ctug2iga/wechat_pbb.pdf?nodeguid=2e33ae21-4636-474a-9afe-26120e9a3a8d&lang=en-US&ext=.pdf",
+        "https://pbebank.com/media/mvnlgiem/pbepbeng002.pdf",
+        "https://pbebank.com/media/qvthl2qt/pb-quantum-tnc.pdf",
+        "https://pbebank.com/media/rczb0ouh/pds-credit-card-en.pdf",
+        "https://pbebank.com/media/rdvptenz/exclusion-list-for-card-rewards.pdf",
+        "https://pbebank.com/media/sxchnwqn/faq-pb-lifestyle-debit-card-renewal-via-mypb-eng-to-bm.pdf",
+        "https://pbebank.com/media/vjjfoitb/dos-pbcc0125.pdf"
+      ]
+    }
+  }
+}

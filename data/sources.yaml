@@ -47,7 +47,7 @@ documents:
     url: https://www.cimbclicks.com.my/form/Credit_Card_PDS.pdf
     tier: 1
     doc_type: pds
-    expected_version: null
+    expected_version: "Date: 24 August 2024"
     last_checked: null
 
   - doc_id: ocbc_credit_cards
@@ -102,7 +102,7 @@ documents:
     url: https://www.maybank2u.com.my/iwov-resources/pdf/personal/cards/credit_cards/nadi-mastercard-pds.pdf
     tier: 1
     doc_type: pds
-    expected_version: null
+    expected_version: "15/10/2026"
     last_checked: null
 
   - doc_id: bankislam_credit_card_i
@@ -116,7 +116,7 @@ documents:
     url: https://www.bankislam.com/wp-content/uploads/Credit-Card-i-Product-Disclosure-Sheet-effective-31-December-2025-2.pdf
     tier: 1
     doc_type: pds
-    expected_version: null
+    expected_version: "31 DECEMBER 2025"
     last_checked: null
 
   - doc_id: muamalat_credit_card_i
