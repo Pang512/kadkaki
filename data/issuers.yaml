@@ -1,0 +1,172 @@
+# Credit card issuers in Malaysia: KadKaki's coverage checklist (KK-07).
+#
+# Source: Bank Negara Malaysia (BNM) Financial Sector Participants Directory, category
+# "Credit Card Issuer": https://www.bnm.gov.my/regulations/fsp-directory
+# Checked: 2026-10-29 (26 issuers, confirmed with the directory's Credit Card Issuers filter).
+# Names are as BNM lists them.
+#
+# batch:         ingestion ticket (A = KK-11, B = KK-12, C = KK-13); "done" = already in sources.yaml
+# listing_page:  the bank's own credit card page (official domain only), used as source_page so the
+#                weekly check spots new or removed PDF links. "TODO" = still to find.
+# pds_found:     PDS links spotted during research. NOT yet verified: check them in the batch ticket.
+# Comparison sites are never listed here.
+
+issuers:
+  # ---------- Batch A: largest local banks (KK-11) ----------
+  - name: Malayan Banking Berhad
+    brand: Maybank
+    type: bank
+    batch: A
+    in_sources: [maybank_cashback_platinum]
+    listing_page: https://www.maybank2u.com.my/maybank2u/malaysia/en/personal/cards/cc_apply_listing.page
+  - name: Maybank Islamic Berhad
+    brand: Maybank Islamic
+    type: islamic_bank
+    batch: A
+    in_sources: [maybank_islamic_nadi]
+    listing_page: https://www.maybank2u.com.my/Islamic/en/personal/cards.page
+    notes: "Nadi Mastercard Credit Card-i is reported as Maybank's basic credit card (fixed 14%)."
+  - name: CIMB Bank Berhad
+    brand: CIMB
+    type: bank
+    batch: A
+    in_sources: [cimb_credit_cards]
+    listing_page: https://www.cimb.com.my/en/personal/day-to-day-banking/cards/credit-card.html?filter=credit-cards
+    notes: "CIMB PDS in sources is dated 24 Aug 2024: look for a newer one."
+  - name: CIMB Islamic Bank Berhad
+    brand: CIMB Islamic
+    type: islamic_bank
+    batch: A
+    listing_page: https://www.cimb.com.my/en/personal/islamic-banking/islamic-banking-overview.html#credit-card
+    notes: "CIMB Lite-i Credit Card reported as its basic credit card (fixed 14%). Listing page is the Islamic overview; a cards-only page would be better if one exists."
+  - name: Public Bank Berhad
+    brand: Public Bank
+    type: bank
+    batch: A
+    in_sources: [pbb_credit_cards]
+    listing_page: https://pbebank.com/en/cards/our-cards/
+    notes: "sources.yaml still points pbb_credit_cards at the PB Quantum page; switch it in KK-11."
+  - name: Public Islamic Bank Berhad
+    brand: Public Islamic
+    type: islamic_bank
+    batch: A
+    listing_page: https://www.publicislamicbank.com.my/personal-banking/credit-card-i/our-cards/
+  - name: RHB Bank Berhad
+    brand: RHB
+    type: bank
+    batch: A
+    listing_page: https://www.rhbgroup.com/personal/cards/credit-cards/overview/index.html
+  - name: RHB Islamic Bank Berhad
+    brand: RHB Islamic
+    type: islamic_bank
+    batch: A
+    listing_page: https://www.rhbgroup.com/personal/cards/credit-cards/overview/index.html
+    notes: "Sinar Credit Card-i reported as RHB's basic credit card. Shares RHB's cards page."
+  - name: Hong Leong Bank Berhad
+    brand: Hong Leong Bank
+    type: bank
+    batch: A
+    in_sources: [hlb_credit_cards_en, hlb_credit_cards_bm]
+    listing_page: https://www.hlb.com.my/en/personal-banking/help-support/product-faq/credit-card.html
+    notes: "The FAQ page links the current PDS (checked 2026-10-29), so it works as the source_page."
+  - name: AmBank (M) Berhad
+    brand: AmBank
+    type: bank
+    batch: A
+    listing_page: https://www.ambank.com.my/cards/credit-cards
+    pds_found: [https://www.ambank.com.my/docs/ambankretaillibraries/product-disclosure-sheet/ambankandislamicpdscreditcards.pdf]
+    notes: "The PDS found covers AmBank and AmBank Islamic cards in one document."
+
+  # ---------- Batch B: foreign and mid-size banks (KK-12) ----------
+  - name: United Overseas Bank (Malaysia) Berhad
+    brand: UOB
+    type: bank
+    batch: B
+    listing_page: TODO
+  - name: HSBC Bank Malaysia Berhad
+    brand: HSBC
+    type: bank
+    batch: B
+    listing_page: TODO
+    pds_found: [https://www.hsbc.com.my/content/dam/hsbc/my/docs/credit-card-product-disclosure.pdf]
+  - name: HSBC Amanah Malaysia Berhad
+    brand: HSBC Amanah
+    type: islamic_bank
+    batch: B
+    listing_page: TODO
+    pds_found: [https://www.hsbc.com.my/content/dam/hsbc/hbms/documents/credit-cards/credit-card-product-disclosure.pdf]
+    notes: "Check whether this second HSBC PDS is the Amanah (Islamic) one."
+  - name: Standard Chartered Bank Malaysia Berhad
+    brand: Standard Chartered
+    type: bank
+    batch: B
+    listing_page: TODO
+  - name: OCBC Bank (Malaysia) Berhad
+    brand: OCBC
+    type: bank
+    batch: B
+    in_sources: [ocbc_credit_cards]
+    listing_page: TODO
+  - name: Alliance Bank Malaysia Berhad
+    brand: Alliance Bank
+    type: bank
+    batch: B
+    listing_page: https://www.alliancebank.com.my/cards/personal/credit-cards
+    notes: "Visa Basic refreshed as a basic credit card: 14% since 1 Oct 2026 (reported)."
+  - name: Affin Bank Berhad
+    brand: Affin
+    type: bank
+    batch: B
+    listing_page: TODO
+  - name: Affin Islamic Bank Berhad
+    brand: Affin Islamic
+    type: islamic_bank
+    batch: B
+    listing_page: TODO
+
+  # ---------- Batch C: Islamic and development banks, others (KK-13) ----------
+  - name: Bank Islam Malaysia Berhad
+    brand: Bank Islam
+    type: islamic_bank
+    batch: C
+    in_sources: [bankislam_credit_card_i]
+    listing_page: TODO
+  - name: Bank Muamalat Malaysia Berhad
+    brand: Bank Muamalat
+    type: islamic_bank
+    batch: C
+    in_sources: [muamalat_credit_card_i]
+    listing_page: TODO
+    notes: "Awwal Credit Card-i launched 20 Oct 2026 as a basic credit card (14%, no annual fee, reported)."
+  - name: Bank Simpanan Nasional
+    brand: BSN
+    type: development_bank
+    batch: C
+    in_sources: [bsn_al_aiman]
+    listing_page: TODO
+  - name: Bank Kerjasama Rakyat Malaysia Berhad
+    brand: Bank Rakyat
+    type: development_bank
+    batch: C
+    listing_page: TODO
+  - name: AEON Credit Service (M) Berhad
+    brand: AEON Credit
+    type: non_bank
+    batch: C
+    listing_page: TODO
+  - name: Bank of China (Malaysia) Berhad
+    brand: Bank of China
+    type: bank
+    batch: C
+    listing_page: TODO
+  - name: Industrial and Commercial Bank of China (Malaysia) Berhad
+    brand: ICBC
+    type: bank
+    batch: C
+    listing_page: TODO
+  - name: Paydee Sdn Bhd
+    brand: Paydee (formerly Synergy Cards)
+    type: non_bank
+    batch: C
+    listing_page: TODO
+    notes: "Check whether it offers personal credit cards at all; drop it if not."
