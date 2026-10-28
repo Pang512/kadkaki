@@ -11,7 +11,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from agent import Agent  # noqa: E402
 from fetch_data import ensure_data  # noqa: E402
 
-st.set_page_config(page_title="Malaysian Credit Card Assistant", page_icon="💳", layout="wide")
+st.set_page_config(page_title="KadKaki", page_icon="💳", layout="wide")
 
 PRIORITY_OPTIONS = {"Not sure yet": None, "💰 Lowest cost": "lowest_cost", "🛒 Cashback & everyday spending": "cashback",
                     "✈️ Travel": "travel", "📉 Low interest (may not always pay in full)": "low_interest"}
@@ -146,7 +146,7 @@ tab_ask, tab_cards, tab_about = st.tabs(["💬 Ask", "🗂️ Card explorer", "�
 
 # ---------------- Ask ----------------
 with tab_ask:
-    st.title("💳 Malaysian Credit Card Assistant")
+    st.title("💳 KadKaki")
     st.caption("Answers grounded in official Product Disclosure Sheets from 8 banks, with citations.")
     chat = st.container()  # messages go here, so the input box below always sits under the latest answer
     question = st.chat_input("Ask about fees, eligibility, Islamic cards...") or st.session_state.pop("pending", None)
