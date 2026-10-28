@@ -226,3 +226,4 @@ data/raw/
 data/processed/
 data/index/
 reports/
+data/freshness_state.json

@@ -11,7 +11,7 @@ except ImportError:
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from freshness import Fetched, accept, label_candidates, pdf_links, render_report, run_check  # noqa: E402
+from freshness import Fetched, accept, issue_for, label_candidates, pdf_links, render_report, run_check  # noqa: E402
 from sources import load_sources  # noqa: E402
 
 TODAY = date(2026, 10, 28)
@@ -171,3 +171,47 @@ def test_report_says_all_clear_or_attention(tmp_path):
     assert "ALL CLEAR" in render_report(run(reg, state, {PDS_URL: pdf}))
     report = render_report(run(reg, state, {PDS_URL: make_pdf("V NOV 2026")}))
     assert "ATTENTION NEEDED" in report and "test_bank_cards" in report
+
+
+# ---------- last confirmed (shown in the app) and issues (KK-06) ----------
+
+def test_last_confirmed_set_only_when_file_matches(tmp_path):
+    reg, state = registry(tmp_path), {}
+    run(reg, state, {PDS_URL: make_pdf("Version A")})
+    assert state["documents"]["test_bank_cards"]["last_confirmed"] == "2026-10-28"
+    later = date(2026, 11, 4)
+    run_check(reg, state, fake({PDS_URL: make_pdf("Version B")}), today=later, delay=0)
+    assert state["documents"]["test_bank_cards"]["last_confirmed"] == "2026-10-28"  # changed: not confirmed
+    accept(state, {"test_bank_cards"})
+    assert state["documents"]["test_bank_cards"]["last_confirmed"] == "2026-11-04"  # reviewed by a person
+
+
+def test_unreachable_keeps_old_confirmed_date(tmp_path):
+    reg, state = registry(tmp_path), {}
+    run(reg, state, {PDS_URL: make_pdf("Version A")})
+    run_check(reg, state, fake({}), today=date(2026, 11, 4), delay=0)
+    assert state["documents"]["test_bank_cards"]["last_confirmed"] == "2026-10-28"
+
+
+def test_no_issue_when_all_clear(tmp_path):
+    reg, state, pdf = registry(tmp_path), {}, make_pdf("Version A")
+    run(reg, state, {PDS_URL: pdf})
+    assert issue_for(run(reg, state, {PDS_URL: pdf})) is None
+
+
+def test_issue_when_a_document_changed(tmp_path):
+    reg, state = registry(tmp_path), {}
+    run(reg, state, {PDS_URL: make_pdf("Version A")})
+    title, body = issue_for(run(reg, state, {PDS_URL: make_pdf("Version B")}))
+    assert "1 item(s) to review" in title and "test_bank_cards" in body and "accept" in body
+
+
+def test_manual_documents_get_a_monthly_reminder_only(tmp_path):
+    reg = registry(tmp_path, url="", source_page=PAGE_URL)
+    page = {PAGE_URL: make_page("/x.pdf")}
+    state = {}
+    run(reg, state, page)  # baseline for the page
+    early = run_check(reg, state, fake(page), today=date(2026, 11, 2), delay=0)
+    mid = run_check(reg, state, fake(page), today=date(2026, 11, 16), delay=0)
+    assert issue_for(early)[0].startswith("Monthly reminder")
+    assert issue_for(mid) is None

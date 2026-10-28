@@ -50,6 +50,10 @@ DATE_LIKE = re.compile(rf"\b(?:{MONTHS})\b[\s,.-]*\d{{4}}\b|\b\d{{1,2}}[/.-]\d{{
 
 ATTENTION = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual",
              "new_links", "missing_links", "not_linked", "page_unreachable"}
+# Problems that need a person this week. "manual" is a standing reminder instead (monthly issue).
+REVIEW = ATTENTION - {"manual"}
+# A document is "confirmed" on a date when its live file was fetched and matched the accepted version.
+NOT_CONFIRMED = {"changed", "version_mismatch", "unreachable", "not_pdf", "manual"}
 
 NEXT_STEP = {
     "changed": "The file is different from the accepted version. Open it, check what changed, then accept it.",
@@ -207,9 +211,12 @@ def run_check(registry, state, fetcher=fetch, today=None, delay=1.0):
 
     for doc in registry.documents:
         entry = docs_state.setdefault(doc.doc_id, {})
-        doc_results.append(check_document(doc, entry, fetcher))
+        result = check_document(doc, entry, fetcher)
+        doc_results.append(result)
         if doc.url:
             entry["last_fetched"] = today
+        if not (NOT_CONFIRMED & set(result["flags"])):
+            entry["last_confirmed"] = today
         time.sleep(delay)
 
     pages = {}
@@ -234,6 +241,8 @@ def accept(state, ids, accept_all=False, registry=None):
         if (accept_all or doc_id in ids) and entry.get("latest_text_sha256"):
             entry["accepted_sha256"] = entry["latest_sha256"]
             entry["accepted_text_sha256"] = entry["latest_text_sha256"]
+            if entry.get("last_fetched"):
+                entry["last_confirmed"] = entry["last_fetched"]  # a person has now reviewed that file
             accepted.append(doc_id)
     page_urls = set(pages_state) if accept_all else set()
     if registry and not accept_all:
@@ -250,6 +259,27 @@ def accept(state, ids, accept_all=False, registry=None):
 
 def needs_attention(results):
     return [r for r in results["documents"] + results["pages"] if ATTENTION & set(r["flags"])]
+
+
+def issue_for(results, today=None):
+    """Return (title, body) for a GitHub issue, or None when nobody needs to act.
+
+    An issue is opened when something needs review this week, and once a month (first 7 days)
+    as a reminder for documents that can only be checked by hand.
+    """
+    day = (today or date.fromisoformat(results["date"])).day
+    review = [r for r in results["documents"] + results["pages"] if REVIEW & set(r["flags"])]
+    manual = [r for r in results["documents"] if "manual" in r["flags"]]
+    if review:
+        title = f"Freshness check {results['date']}: {len(review)} item(s) to review"
+    elif manual and day <= 7:
+        title = f"Monthly reminder {results['date']}: {len(manual)} document(s) to check by hand"
+    else:
+        return None
+    body = render_report(results) + (
+        "\n**When done:** for each reviewed change, open Actions → Freshness check → Run workflow, "
+        "type the doc_id(s) in *accept* (separated by spaces), then close this issue.\n")
+    return title, body
 
 
 def render_report(results):
@@ -329,6 +359,7 @@ def main(argv=None):
     parser.add_argument("--accept-all", action="store_true", help="accept everything currently seen")
     parser.add_argument("--state", default=STATE, help="state file (default: data/freshness_state.json)")
     parser.add_argument("--report", default=REPORT, help="report file (default: reports/freshness_latest.md)")
+    parser.add_argument("--issue", help="if someone needs to act, write an issue (title on line 1) to this file")
     args = parser.parse_args(argv)
 
     registry = load_sources()
@@ -346,6 +377,15 @@ def main(argv=None):
     report = Path(args.report)
     report.parent.mkdir(parents=True, exist_ok=True)
     report.write_text(render_report(results), encoding="utf-8")
+
+    if args.issue:
+        issue_path, issue = Path(args.issue), issue_for(results)
+        if issue:
+            issue_path.parent.mkdir(parents=True, exist_ok=True)
+            issue_path.write_text(issue[0] + "\n" + issue[1], encoding="utf-8")
+            print("Issue to open:", issue[0])
+        elif issue_path.exists():
+            issue_path.unlink()
 
     attention = needs_attention(results)
     print(f"{'ATTENTION NEEDED' if attention else 'ALL CLEAR'}: {len(attention)} item(s). Report: {report}")
