@@ -1,0 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+   torch
+   google-genai
+   python-dotenv
+   pyyaml
+   requests
+   pymupdf
+   sentence-transformers
+   faiss-cpu
+   rank-bm25
+   pandas
+   streamlit

@@ -1,0 +1,53 @@
+# All tunable settings live here, so experiments don't require code changes.
+paths:
+  sources: data/sources.yaml
+  raw_dir: data/raw
+  processed_dir: data/processed
+  index_dir: data/index
+
+chunking:
+  fixed:
+    chunk_size_words: 150
+    overlap_words: 30
+  structured:
+    max_words: 300
+  structured_tables:
+    max_words: 200   # repeated column names make lines longer, so a little lower to stay under 512 tokens
+
+llm:
+  model: gemini-3.5-flash-lite
+  fallback_model: gemini-3.5-flash   # set to null to disable
+  temperature: 0
+  max_attempts: 2      # tries per model before switching to the fallback
+  base_wait_s: 5       # wait before a retry (doubles each time); evaluation will use a longer wait
+  prompt_version: v2
+  timeout_s: 30   # give up on a stuck Gemini call after 30 seconds
+
+embedding:
+  model: BAAI/bge-small-en-v1.5
+  query_instruction: "Represent this sentence for searching relevant passages: "
+  batch_size: 32
+
+retrieval:
+  top_k: 5
+  languages: [en]
+  strategy: structured_tables
+  mode: hybrid        # dense | bm25 | hybrid
+  candidates: 20     # each method's top 20 go into the fusion
+  rrf_k: 60          # standard RRF constant, deliberately not tuned
+  reranker: cross-encoder/ms-marco-MiniLM-L-6-v2
+
+evaluation:
+  judge_model: gemini-3.1-flash-lite
+  sleep_s: 4        # pause between API calls to stay under free-tier limits
+
+catalog:
+  extraction_model: gemini-3.5-flash   # stronger model for extraction; only 8 calls
+  path: data/catalog/catalog.csv       # the verified catalog
+
+agent:
+  max_tool_rounds: 4   # safety limit on tool-calling rounds per question
+
+app:
+  max_questions_per_session: 15
+  max_questions_per_day: 100
