@@ -1,0 +1,3 @@
+# Tools for development only (not needed by the live app)
+-r requirements.txt
+pytest

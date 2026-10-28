@@ -1,6 +1,27 @@
-# Official Product Disclosure Sheets (PDS) used in this project.
+# KadKaki source registry (version 2).
 # PDFs are NOT stored in the repo. Run: python src/download.py
-# Personal, non-commercial demo. Documents remain the property of the banks.
+# Validate this file after every edit: python src/sources.py
+# Personal, non-commercial project. Documents remain the property of the banks.
+#
+# Fields per document
+#   doc_id            lowercase_with_underscores, unique
+#   bank, product     as shown to users
+#   card_type         conventional | islamic (islamic needs shariah_concept)
+#   scope             single_card | multi_card
+#   language          en | ms
+#   valid_as_at       "unknown", YYYY, YYYY-MM or YYYY-MM-DD (date printed on the document)
+#   url               direct link to the file, or "" for manual download (then source_page is required)
+#   source_page       bank page where the file is linked (optional when url is set)
+#   tier              1 = PDS (regulated: fees, rates, eligibility)
+#                     2 = bank product page or rewards T&Cs (perks, caps, offers)
+#                     Comparison sites and news are never listed here; they are never cited.
+#   doc_type          pds | product_page | rewards_tnc (tier 1 must be pds)
+#   expected_version  the version label printed inside the document, e.g. "CC PDS ENG V OCT 2026";
+#                     null until someone reads it from the file
+#   last_checked      YYYY-MM-DD when the live file was last confirmed, or null
+#   notes             optional free text
+
+version: 2
 
 documents:
   - doc_id: maybank_cashback_platinum
@@ -11,6 +32,10 @@ documents:
     language: en
     valid_as_at: "unknown"
     url: https://www.maybank2u.com.my/iwov-resources/pdf/personal/cards/credit_cards/cashback-mcard-platinum-pds.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: cimb_credit_cards
     bank: CIMB
@@ -20,6 +45,10 @@ documents:
     language: en
     valid_as_at: "2024-08-24"
     url: https://www.cimbclicks.com.my/form/Credit_Card_PDS.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: ocbc_credit_cards
     bank: OCBC
@@ -29,6 +58,10 @@ documents:
     language: en
     valid_as_at: "2026-07"
     url: https://www.ocbc.com.my/iwov-resources/my/ocbc/personal/pdf/cards/card-services/pds-credit-card.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: hlb_credit_cards_en
     bank: Hong Leong Bank
@@ -36,7 +69,13 @@ documents:
     card_type: conventional
     scope: multi_card
     language: en
+    valid_as_at: "2026-10"
     url: https://www.hlb.com.my/content/dam/hlb/my/docs/pdf/Personal/CreditCard/pds/hlb-credit-card-pds-en.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: "CC PDS ENG V OCT 2026"
+    last_checked: null
+    notes: "Covers 9 cards in one sheet (Infinite P, Infinite, Infinite Doctor's Edition, WISE Gold, Sutera Platinum, Essential, GSC Gold, GSC Platinum, I'm). Version label read from the live file on 2026-10-28."
 
   - doc_id: pbb_credit_cards
     bank: Public Bank
@@ -47,6 +86,10 @@ documents:
     valid_as_at: "2026-10-01"
     url: ""   # manual download, see source_page
     source_page: https://pbebank.com/en/cards/our-cards/pb-quantum-credit-cards-2/
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: maybank_islamic_nadi
     bank: Maybank Islamic
@@ -57,6 +100,10 @@ documents:
     language: en
     valid_as_at: "unknown"
     url: https://www.maybank2u.com.my/iwov-resources/pdf/personal/cards/credit_cards/nadi-mastercard-pds.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: bankislam_credit_card_i
     bank: Bank Islam
@@ -67,6 +114,10 @@ documents:
     language: en
     valid_as_at: "2025-12-31"
     url: https://www.bankislam.com/wp-content/uploads/Credit-Card-i-Product-Disclosure-Sheet-effective-31-December-2025-2.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: muamalat_credit_card_i
     bank: Bank Muamalat
@@ -77,6 +128,10 @@ documents:
     language: en
     valid_as_at: "2026-01-01"
     url: https://www.muamalat.com.my/downloads/documents/PDS_Credit_Card_ENG.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: bsn_al_aiman
     bank: BSN
@@ -87,6 +142,10 @@ documents:
     language: en
     valid_as_at: "2025-11"
     url: https://www.bsn.com.my/cms/upload/pdf/islamic/cards/pds.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
 
   - doc_id: hlb_credit_cards_bm
     bank: Hong Leong Bank
@@ -94,4 +153,16 @@ documents:
     card_type: conventional
     scope: multi_card
     language: ms
+    valid_as_at: "unknown"
     url: https://www.hlb.com.my/content/dam/hlb/my/docs/pdf/Personal/CreditCard/pds/hlb-credit-card-pds-bm.pdf
+    tier: 1
+    doc_type: pds
+    expected_version: null
+    last_checked: null
+
+# Links that look official but must never be used (outdated or misleading).
+# The loader rejects any document whose url appears here.
+blocked_urls:
+  - url: https://www.hlb.com.my/content/dam/hlb/my/docs/pdf/Personal/CreditCard/ImCard/hlb-product-disclosure-sheet-en.pdf
+    reason: "Old HLB PDS (reported as V001 APR 2019) that still lists discontinued cards (AirAsia, Emirates). Search engines surface it. Use hlb_credit_cards_en instead."
+    noted: 2026-10-28
